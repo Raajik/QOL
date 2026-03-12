@@ -1,0 +1,122 @@
+{
+  "// Patches": "Features to enable. Remove an entry to disable that feature. Valid values: Animations, Augmentations, Defaults, Fellowships, PermanentObjects, Recklessness, Tailoring, VendorsBuyEverything, QuestgiverAuras, Stackable.",
+  "Patches": [
+    "Animations",
+    "Augmentations",
+    "Defaults",
+    "Fellowships",
+    "PermanentObjects",
+    "Recklessness",
+    "Tailoring",
+    "VendorsBuyEverything",
+    "QuestgiverAuras",
+    "Stackable"
+  ],
+  "// MaxSpecCredits": "Total specialisation credits a player may spend. Vanilla cap is 70. Set to 9999 to make it effectively unlimited.",
+  "MaxSpecCredits": 9999,
+  "Animations": {
+    "DieSeconds": 0.0,
+    "AnimationSpeeds": {
+      "AllegianceHometownRecall": 0.0,
+      "HouseRecall": 0.0,
+      "LifestoneRecall": 0.0,
+      "MarketplaceRecall": 0.0,
+      "PKArenaRecall": 0.0
+    }
+  },
+  "Defaults": {
+    "Int64Defaults": {
+      "MaximumLuminance": 1000000000
+    },
+    "IntDefaults": {},
+    "FloatDefaults": {},
+    "BoolDefaults": {}
+  },
+  "Fellowship": {
+    "SendDetails": true,
+    "MaxMembers": 30,
+    "IgnoreBusy": false,
+    "OverrideSharePercent": true,
+    "// FlatSharePercent": "XP share fraction applied to all members when OverrideSharePercent is true. 1.0 = 100%, 0.5 = 50%.",
+    "FlatSharePercent": 1.0,
+    "// SharePercent": "Per-member-count XP share table used when OverrideSharePercent is false. Keys are fellowship sizes, values are fractions (0.0\u20131.0).",
+    "SharePercent": {
+      "1": 1.0,
+      "2": 0.75,
+      "3": 0.6,
+      "4": 0.55,
+      "5": 0.5,
+      "6": 0.45,
+      "7": 0.4,
+      "8": 0.35,
+      "9": 0.3
+    },
+    "// DefaultShare": "XP share fraction for fellowships larger than the highest key in SharePercent. 0.0 = no share beyond the table.",
+    "DefaultShare": 0.0
+  },
+  "Recklessness": {
+    "// PowerLow": "Attack power fraction below which Recklessness provides no bonus. Range 0.0\u20131.0.",
+    "PowerLow": 0.2,
+    "// PowerHigh": "Attack power fraction at which Recklessness reaches full effectiveness. Range 0.0\u20131.0.",
+    "PowerHigh": 0.8,
+    "// RatingTrained": "Damage rating bonus granted when Recklessness is Trained.",
+    "RatingTrained": 10,
+    "// RatingSpecialized": "Damage rating bonus granted when Recklessness is Specialized.",
+    "RatingSpecialized": 20
+  },
+  "Augmentation": {
+    "IgnoreSharedAttribute": false,
+    "IgnoreSharedResist": false,
+    "MaxAugs": {
+      "Strength": 10,
+      "Endurance": 10,
+      "Coordination": 10,
+      "Quickness": 10,
+      "Focus": 10,
+      "Self": 10,
+      "Salvage": 1,
+      "ItemTinkering": 1,
+      "ArmorTinkering": 1,
+      "MagicItemTinkering": 1,
+      "WeaponTinkering": 1,
+      "PackSlot": 1,
+      "BurdenLimit": 5,
+      "DeathItemLoss": 3,
+      "DeathSpellLoss": 1,
+      "CritProtect": 1,
+      "BonusXP": 1,
+      "BonusSalvage": 4,
+      "ImbueChance": 1,
+      "RegenBonus": 2,
+      "SpellDuration": 5,
+      "ResistSlash": 2,
+      "ResistPierce": 2,
+      "ResistBludgeon": 2,
+      "ResistAcid": 2,
+      "ResistFire": 2,
+      "ResistCold": 2,
+      "ResistElectric": 2,
+      "FociCreature": 1,
+      "FociItem": 1,
+      "FociLife": 1,
+      "FociWar": 1,
+      "FociVoid": 1
+    }
+  },
+  "QuestgiverAuras": {
+    "// ScriptId": "Particle aura applied to quest-giver NPCs. Common values: 152=Blue glow, 153=Green glow, 154=Gold glow (default), 6=Red particles, 11=Blue particles, 16=Yellow particles.",
+    "ScriptId": 154,
+    "// ScriptIntensity": "Aura brightness/strength. 1.0 = full strength.",
+    "ScriptIntensity": 1.0,
+    "// Interval": "Seconds between aura re-broadcasts. Lower values look more continuous but send more packets. Default 5.0 works well for most scripts.",
+    "Interval": 5.0
+  },
+  "Stackable": {
+    "MaxStackSize": 100,
+    "StackableTypes": [
+      "Book",
+      "Key",
+      "Generic"
+    ]
+  }
+}
