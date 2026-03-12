@@ -84,8 +84,8 @@ public class QuestgiverAuras
 public class QuestgiverAuraSettings
 {
     [JsonPropertyName("// ScriptId")]
-    public string ScriptIdDoc { get; } = "Particle aura applied to quest-giver NPCs. Common values: 152=Blue glow, 153=Green glow, 154=Gold glow (default), 6=Red particles, 11=Blue particles, 16=Yellow particles.";
-    public uint ScriptId { get; set; } = (uint)PlayScript.RestrictionEffectGold;
+    public string ScriptIdDoc { get; } = "Aura effect broadcast to nearby players. ShieldUp scripts are the lifestone/protection glows and work well on NPCs: 43=Red, 45=Orange, 47=Yellow, 49=Green, 51=Blue, 53=Purple, 55=Grey. SpecialState scripts (120-137) are alternative glows. RestrictionEffect values (152-154) do NOT render on animated creatures.";
+    public uint ScriptId { get; set; } = (uint)PlayScript.ShieldUpGreen;
 
     [JsonPropertyName("// ScriptIntensity")]
     public string ScriptIntensityDoc { get; } = "Aura brightness/strength. 1.0 = full strength.";
@@ -93,5 +93,5 @@ public class QuestgiverAuraSettings
 
     [JsonPropertyName("// Interval")]
     public string IntervalDoc { get; } = "Seconds between aura re-broadcasts. Lower values look more continuous but send more packets. Default 5.0 works well for most scripts.";
-    public double Interval { get; set; } = 5.0;
+    public double Interval { get; set; } = 4.0;
 }
