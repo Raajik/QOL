@@ -30,9 +30,14 @@ public class QuestgiverAuras
 
         ModManager.Log($"[QuestgiverAuras] {__instance.Name} — IS a quest giver, scheduling aura (ScriptId={Cfg.ScriptId})", ModManager.LogLevel.Warn);
 
-        // GenerateWieldList fires during the constructor, before the creature is placed on a
-        // landblock. ScheduleAura checks CurrentLandblock != null, so we delay the first call
-        // by one second to let the creature finish loading onto its landblock.
+        // Set DefaultScriptId here (before the creature is added to the landblock) so it is
+        // included in every CreateObject packet sent to players who enter range later.
+        __instance.DefaultScriptId        = Cfg.ScriptId;
+        __instance.DefaultScriptIntensity = Cfg.ScriptIntensity;
+
+        // Also start a repeating GameMessageScript broadcast for players already in range.
+        // GenerateWieldList fires in the constructor so CurrentLandblock is null here;
+        // delay by 1 second to let the creature finish loading onto its landblock first.
         var chain = new ActionChain();
         chain.AddDelaySeconds(1.0);
         chain.AddAction(__instance, () => ScheduleAura(__instance));
@@ -84,8 +89,8 @@ public class QuestgiverAuras
 public class QuestgiverAuraSettings
 {
     [JsonPropertyName("// ScriptId")]
-    public string ScriptIdDoc { get; } = "Aura effect broadcast to nearby players. ShieldUp scripts are the lifestone/protection glows and work well on NPCs: 43=Red, 45=Orange, 47=Yellow, 49=Green, 51=Blue, 53=Purple, 55=Grey. SpecialState scripts (120-137) are alternative glows. RestrictionEffect values (152-154) do NOT render on animated creatures.";
-    public uint ScriptId { get; set; } = (uint)PlayScript.ShieldUpGreen;
+    public string ScriptIdDoc { get; } = "Aura script applied to quest-giver NPCs. SpecialState scripts are designed for live creature visual states and work on humanoid models: 130=Red, 131=Orange, 132=Yellow, 133=Green (default), 134=Blue, 135=Purple, 136=White, 137=Black. ShieldUp scripts (43-55) work on inanimate objects but not on animated humanoid NPCs. RestrictionEffect values (152-154) do NOT render on animated creatures.";
+    public uint ScriptId { get; set; } = (uint)PlayScript.SpecialStateGreen;
 
     [JsonPropertyName("// ScriptIntensity")]
     public string ScriptIntensityDoc { get; } = "Aura brightness/strength. 1.0 = full strength.";

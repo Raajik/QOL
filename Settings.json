@@ -104,8 +104,8 @@
     }
   },
   "QuestgiverAuras": {
-    "// ScriptId": "Aura effect broadcast to nearby players. ShieldUp scripts work well on NPCs: 43=Red, 45=Orange, 47=Yellow, 49=Green, 51=Blue, 53=Purple, 55=Grey. SpecialState scripts 120-137 are alternatives. RestrictionEffect values 152-154 do NOT render on animated creatures.",
-    "ScriptId": 49,
+    "// ScriptId": "Aura effect broadcast to nearby players. SpecialState scripts work on humanoid models: 130=Red, 131=Orange, 132=Yellow, 133=Green (default), 134=Blue, 135=Purple, 136=White, 137=Black. ShieldUp scripts (43-55) only work on inanimate objects. RestrictionEffect values (152-154) do NOT render on animated creatures.",
+    "ScriptId": 133,
     "// ScriptIntensity": "Aura brightness/strength. 1.0 = full strength.",
     "ScriptIntensity": 1.0,
     "// Interval": "Seconds between aura re-broadcasts. Should be slightly less than the script visual duration to avoid gaps. Default 4.0 works well for ShieldUp scripts.",
