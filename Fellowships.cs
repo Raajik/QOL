@@ -223,8 +223,13 @@ public class FellowshipSettings
 
     // When true, all members receive FlatSharePercent instead of the per-count SharePercent table
     public bool OverrideSharePercent { get; set; } = true;
+
+    [JsonPropertyName("// FlatSharePercent")]
+    public string FlatShareDoc { get; } = "XP share fraction applied to all members when OverrideSharePercent is true. 1.0 = 100%, 0.5 = 50%.";
     public double FlatSharePercent { get; set; } = 1.0;
 
+    [JsonPropertyName("// SharePercent")]
+    public string SharePercentDoc { get; } = "Per-member-count XP share table used when OverrideSharePercent is false. Keys are fellowship sizes, values are fractions (0.0–1.0).";
     public Dictionary<int, double> SharePercent { get; set; } = new()
     {
         [1] = 1.0,
@@ -237,6 +242,9 @@ public class FellowshipSettings
         [8] = .35,
         [9] = .3,
     };
+
+    [JsonPropertyName("// DefaultShare")]
+    public string DefaultShareDoc { get; } = "XP share fraction for fellowships larger than the highest key in SharePercent. 0.0 = no share beyond the table.";
     public double DefaultShare { get; set; } = 0;
 
     //public long EvenShareLevel { get; set; } = 50;  //fellowship_even_share_level

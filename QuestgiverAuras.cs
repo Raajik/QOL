@@ -58,19 +58,11 @@ public class QuestgiverAuras
 
 public class QuestgiverAuraSettings
 {
-    // PlayScript value set as DefaultScriptId on qualifying quest-giver creatures.
-    // Persistent looping particle aura rendered directly on the creature — no item equipped.
-    // Uses the same mechanism as house restriction spheres.
-    //
-    // Color options:
-    //   0x98 (152) RestrictionEffectBlue  — blue glow
-    //   0x99 (153) RestrictionEffectGreen — green glow (default)
-    //   0x9A (154) RestrictionEffectGold  — gold glow
-    //   0x06 (  6) AttribUpRed            — red particles
-    //   0x0B ( 11) AttribUpBlue           — blue particles
-    //   0x10 ( 16) AttribUpYellow         — yellow particles
+    [JsonPropertyName("// ScriptId")]
+    public string ScriptIdDoc { get; } = "Particle aura applied to quest-giver NPCs. Common values: 152=Blue glow, 153=Green glow, 154=Gold glow (default), 6=Red particles, 11=Blue particles, 16=Yellow particles.";
     public uint ScriptId { get; set; } = (uint)PlayScript.RestrictionEffectGold;
 
-    // Particle effect intensity. 1.0 = full strength.
+    [JsonPropertyName("// ScriptIntensity")]
+    public string ScriptIntensityDoc { get; } = "Aura brightness/strength. 1.0 = full strength.";
     public float ScriptIntensity { get; set; } = 1.0f;
 }

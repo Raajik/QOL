@@ -78,8 +78,8 @@ internal static class Stackable
 
 public class StackableSettings
 {
-    // Maximum items per stack for non-native stackable types.
-    public int MaxStackSize { get; set; } = 100;
+    // Maximum items per stack for non-native stackable types (max 65535).
+    public ushort MaxStackSize { get; set; } = 100;
 
     // WeenieTypes that should become stackable. Items of these types will receive
     // MaxStackSize = MaxStackSize above and can be merged via the normal drag-to-stack UI.

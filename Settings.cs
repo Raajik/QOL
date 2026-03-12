@@ -1,11 +1,13 @@
-﻿namespace QOL;
+namespace QOL;
 
 public class Settings
 {
+    [JsonPropertyName("// Patches")]
+    public string PatchesDoc { get; } = "Features to enable. Remove an entry to disable that feature. Valid values: Animations, Augmentations, Defaults, Fellowships, PermanentObjects, Recklessness, Tailoring, VendorsBuyEverything, QuestgiverAuras, Stackable.";
     public Features[] Patches { get; set; } = Enum.GetValues<Features>();
 
-
-    //Sum of specialization credits
+    [JsonPropertyName("// MaxSpecCredits")]
+    public string MaxSpecCreditsDoc { get; } = "Total specialisation credits a player may spend. Vanilla cap is 70. Set to 9999 to make it effectively unlimited.";
     public int MaxSpecCredits { get; set; } = 9999;
 
     public AnimationSettings Animations { get; set; } = new();
