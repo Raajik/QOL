@@ -44,4 +44,4 @@ global using ACE.Shared;
 global using ACE.Shared.Helpers;
 global using ACE.Shared.Mods;
 
-global using S = QualityOfLife.PatchClass;
+global using S = QOL.PatchClass;

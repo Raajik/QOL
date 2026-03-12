@@ -1,4 +1,4 @@
-﻿namespace QualityOfLife;
+﻿namespace QOL;
 
 [HarmonyPatchCategory(nameof(Features.Defaults))]
 internal static class Defaults

@@ -1,4 +1,4 @@
-﻿namespace QualityOfLife;
+﻿namespace QOL;
 
 [HarmonyPatchCategory(nameof(Features.Recklessness))]
 public class Recklessness

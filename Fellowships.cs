@@ -1,4 +1,4 @@
-﻿namespace QualityOfLife;
+﻿namespace QOL;
 
 [HarmonyPatchCategory(nameof(Features.Fellowships))]
 public class Fellowships
@@ -75,13 +75,15 @@ public class Fellowships
         }
         else
         {
-            if (PropertyManager.GetBool("fellow_busy_no_recruit").Item && newMember.IsBusy)
+            var ignoreBusy = S.Settings.Fellowship.IgnoreBusy;
+
+            if (!ignoreBusy && PropertyManager.GetBool("fellow_busy_no_recruit").Item && newMember.IsBusy)
             {
                 inviter.Session.Network.EnqueueSend(new GameMessageSystemChat($"{newMember.Name} is busy.", ChatMessageType.Broadcast));
                 return false;
             }
 
-            if (newMember.GetCharacterOption(CharacterOption.AutomaticallyAcceptFellowshipRequests))
+            if (ignoreBusy || newMember.GetCharacterOption(CharacterOption.AutomaticallyAcceptFellowshipRequests))
             {
                 __instance.AddConfirmedMember(inviter, newMember, true);
             }
@@ -162,11 +164,11 @@ public class Fellowships
     [HarmonyPatch(typeof(Fellowship), nameof(Fellowship.GetMemberSharePercent))]
     public static bool PreGetMemberSharePercent(ref Fellowship __instance, ref double __result)
     {
-        //If you don't have enough shares specified use the default
-        //__result = S.Settings.Fellowship.SharePercent.TryGetValue(__instance.GetFellowshipMembers().Count, out var share) ? share : S.Settings.Fellowship.DefaultShare;
-        __result = GetFellowshipShare(__instance.GetFellowshipMembers().Count);
+        if (S.Settings.Fellowship.OverrideSharePercent)
+            __result = S.Settings.Fellowship.FlatSharePercent;
+        else
+            __result = GetFellowshipShare(__instance.GetFellowshipMembers().Count);
 
-        //Return false to override
         return false;
     }
 
@@ -212,8 +214,16 @@ public class Fellowships
 
 public class FellowshipSettings
 {
+    // Sends a message to inviter and new member showing fellowship name and XP share % on invite
     public bool SendDetails { get; set; } = true;
-    public int MaxMembers { get; set; } = 2;
+    public int MaxMembers { get; set; } = 30;
+
+    // When true, bypasses IsBusy check and auto-accepts invites without a confirmation popup
+    public bool IgnoreBusy { get; set; } = false;
+
+    // When true, all members receive FlatSharePercent instead of the per-count SharePercent table
+    public bool OverrideSharePercent { get; set; } = true;
+    public double FlatSharePercent { get; set; } = 1.0;
 
     public Dictionary<int, double> SharePercent { get; set; } = new()
     {

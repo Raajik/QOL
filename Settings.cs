@@ -1,4 +1,4 @@
-﻿namespace QualityOfLife;
+﻿namespace QOL;
 
 public class Settings
 {
@@ -6,13 +6,15 @@ public class Settings
 
 
     //Sum of specialization credits
-    public int MaxSpecCredits { get; set; } = 70;
+    public int MaxSpecCredits { get; set; } = 9999;
 
     public AnimationSettings Animations { get; set; } = new();
     public DefaultsSettings Defaults { get; set; } = new();
     public FellowshipSettings Fellowship { get; set; } = new();
     public RecklessnessSettings Recklessness { get; set; } = new();
     public AugmentationSettings Augmentation { get; set; } = new();
+    public QuestgiverAuraSettings QuestgiverAuras { get; set; } = new();
+    public StackableSettings Stackable { get; set; } = new();
 }
 
 public enum Features
@@ -24,4 +26,7 @@ public enum Features
     PermanentObjects,
     Recklessness,
     Tailoring,
+    VendorsBuyEverything,
+    QuestgiverAuras,
+    Stackable,
 }
