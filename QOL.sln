@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QOL", "QualityOfLife.csproj", "{B96C44D4-5B49-0A7C-9C76-79C746E087D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QOL", "QOL.csproj", "{B96C44D4-5B49-0A7C-9C76-79C746E087D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

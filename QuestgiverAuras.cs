@@ -5,13 +5,12 @@ public class QuestgiverAuras
 {
     static QuestgiverAuraSettings Cfg => S.Settings.QuestgiverAuras;
 
-    // EmoteType values for quest-related emote actions (ACE EmoteType enum)
-    const uint GiveQuest = 21;
-    const uint InqQuest  = 22;
+    // EmoteType values for quest-related actions (ACE EmoteType enum)
+    const uint StampQuest = (uint)EmoteType.StampQuest; // 22 — NPC gives/stamps a quest
+    const uint InqQuest   = (uint)EmoteType.InqQuest;   // 21 — NPC checks quest status
 
     // Postfix on Creature.GenerateWieldList — fires during SetEphemeralValues() before the
-    // creature is broadcast to clients, so DefaultScriptId is included in the initial create
-    // packet with no manual resync needed.
+    // creature is added to the landblock.
     // Only WeenieType.Creature (10) is affected — vendors and other NPC types are skipped
     // intentionally to preserve discovery for quests held by those types.
     [HarmonyPostfix]
@@ -24,35 +23,35 @@ public class QuestgiverAuras
         if (!IsQuestGiver(__instance))
             return;
 
-        __instance.DefaultScriptId        = Cfg.ScriptId;
-        __instance.DefaultScriptIntensity = Cfg.ScriptIntensity;
+        // DefaultScriptId is included in the CreateObject physics packet, but the AC client
+        // doesn't render it on animated creature objects. GameMessageScript is used instead,
+        // repeating at Interval seconds so the effect stays visible for all nearby players.
+        ScheduleAura(__instance);
     }
 
-    // Returns true if the creature has any emote action of type GiveQuest (21) or InqQuest (22).
-    // Mirrors the original SQL filter: WHERE b.type IN (21, 22)
+    // Broadcasts the aura effect and re-schedules itself until the creature leaves the world.
+    static void ScheduleAura(Creature creature)
+    {
+        if (creature.IsDestroyed || creature.CurrentLandblock == null)
+            return;
+
+        creature.EnqueueBroadcast(new GameMessageScript(creature.Guid, (PlayScript)Cfg.ScriptId, Cfg.ScriptIntensity));
+
+        var chain = new ActionChain();
+        chain.AddDelaySeconds(Cfg.Interval);
+        chain.AddAction(creature, () => ScheduleAura(creature));
+        chain.EnqueueChain();
+    }
+
+    // Returns true if the creature's weenie template has any StampQuest or InqQuest emote action.
+    // Uses the weenie cache (always populated) rather than the per-instance Biota, because
+    // dynamically spawned creatures don't persist emotes to their individual Biota records.
     static bool IsQuestGiver(Creature creature)
     {
-        try
-        {
-            creature.BiotaDatabaseLock.EnterReadLock();
-            try
-            {
-                return creature.Biota.PropertiesEmote != null &&
-                       creature.Biota.PropertiesEmote
-                           .Any(e => e.PropertiesEmoteAction != null &&
-                                     e.PropertiesEmoteAction.Any(a => a.Type == GiveQuest ||
-                                                                       a.Type == InqQuest));
-            }
-            finally
-            {
-                creature.BiotaDatabaseLock.ExitReadLock();
-            }
-        }
-        catch (Exception ex)
-        {
-            ModManager.Log($"QuestgiverAuras: emote check failed for {creature.Name}: {ex.Message}", ModManager.LogLevel.Warn);
-            return false;
-        }
+        var weenie = DatabaseManager.World.GetCachedWeenie(creature.WeenieClassId);
+        return weenie?.PropertiesEmote
+            ?.Any(e => e.PropertiesEmoteAction
+                ?.Any(a => a.Type == StampQuest || a.Type == InqQuest) == true) == true;
     }
 }
 
@@ -65,4 +64,8 @@ public class QuestgiverAuraSettings
     [JsonPropertyName("// ScriptIntensity")]
     public string ScriptIntensityDoc { get; } = "Aura brightness/strength. 1.0 = full strength.";
     public float ScriptIntensity { get; set; } = 1.0f;
+
+    [JsonPropertyName("// Interval")]
+    public string IntervalDoc { get; } = "Seconds between aura re-broadcasts. Lower values look more continuous but send more packets. Default 5.0 works well for most scripts.";
+    public double Interval { get; set; } = 5.0;
 }

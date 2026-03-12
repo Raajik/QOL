@@ -21,6 +21,7 @@ global using ACE.Server.Network;
 global using ACE.Server.Physics;
 global using ACE.Server.WorldObjects.Entity;
 global using ACE.Server.WorldObjects;
+global using ACE.Database;
 #if REALM
 global using ACE.Server.Realms;
 //global using ACE.Database.Models.World;
