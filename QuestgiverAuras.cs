@@ -20,8 +20,15 @@ public class QuestgiverAuras
         if (__instance.WeenieType != WeenieType.Creature)
             return;
 
+        ModManager.Log($"[QuestgiverAuras] Checking {__instance.Name} (WCID {__instance.WeenieClassId}, type {__instance.WeenieType})", ModManager.LogLevel.Warn);
+
         if (!IsQuestGiver(__instance))
+        {
+            ModManager.Log($"[QuestgiverAuras] {__instance.Name} — not a quest giver, skipping", ModManager.LogLevel.Warn);
             return;
+        }
+
+        ModManager.Log($"[QuestgiverAuras] {__instance.Name} — IS a quest giver, scheduling aura (ScriptId={Cfg.ScriptId})", ModManager.LogLevel.Warn);
 
         // GenerateWieldList fires during the constructor, before the creature is placed on a
         // landblock. ScheduleAura checks CurrentLandblock != null, so we delay the first call
@@ -36,8 +43,12 @@ public class QuestgiverAuras
     static void ScheduleAura(Creature creature)
     {
         if (creature.IsDestroyed || creature.CurrentLandblock == null)
+        {
+            ModManager.Log($"[QuestgiverAuras] {creature.Name} — stopping aura (destroyed={creature.IsDestroyed}, landblock={creature.CurrentLandblock == null})", ModManager.LogLevel.Warn);
             return;
+        }
 
+        ModManager.Log($"[QuestgiverAuras] {creature.Name} — broadcasting aura script {Cfg.ScriptId}", ModManager.LogLevel.Warn);
         creature.EnqueueBroadcast(new GameMessageScript(creature.Guid, (PlayScript)Cfg.ScriptId, Cfg.ScriptIntensity));
 
         var chain = new ActionChain();
@@ -52,9 +63,21 @@ public class QuestgiverAuras
     static bool IsQuestGiver(Creature creature)
     {
         var weenie = DatabaseManager.World.GetCachedWeenie(creature.WeenieClassId);
-        return weenie?.PropertiesEmote
-            ?.Any(e => e.PropertiesEmoteAction
-                ?.Any(a => a.Type == StampQuest || a.Type == InqQuest) == true) == true;
+        if (weenie == null)
+        {
+            ModManager.Log($"[QuestgiverAuras] {creature.Name} — weenie {creature.WeenieClassId} not in cache", ModManager.LogLevel.Warn);
+            return false;
+        }
+        if (weenie.PropertiesEmote == null || weenie.PropertiesEmote.Count == 0)
+        {
+            ModManager.Log($"[QuestgiverAuras] {creature.Name} — weenie has no emotes", ModManager.LogLevel.Warn);
+            return false;
+        }
+        bool result = weenie.PropertiesEmote
+            .Any(e => e.PropertiesEmoteAction
+                ?.Any(a => a.Type == StampQuest || a.Type == InqQuest) == true);
+        ModManager.Log($"[QuestgiverAuras] {creature.Name} — emote check result: {result} (emote count: {weenie.PropertiesEmote.Count})", ModManager.LogLevel.Warn);
+        return result;
     }
 }
 
