@@ -23,10 +23,13 @@ public class QuestgiverAuras
         if (!IsQuestGiver(__instance))
             return;
 
-        // DefaultScriptId is included in the CreateObject physics packet, but the AC client
-        // doesn't render it on animated creature objects. GameMessageScript is used instead,
-        // repeating at Interval seconds so the effect stays visible for all nearby players.
-        ScheduleAura(__instance);
+        // GenerateWieldList fires during the constructor, before the creature is placed on a
+        // landblock. ScheduleAura checks CurrentLandblock != null, so we delay the first call
+        // by one second to let the creature finish loading onto its landblock.
+        var chain = new ActionChain();
+        chain.AddDelaySeconds(1.0);
+        chain.AddAction(__instance, () => ScheduleAura(__instance));
+        chain.EnqueueChain();
     }
 
     // Broadcasts the aura effect and re-schedules itself until the creature leaves the world.
