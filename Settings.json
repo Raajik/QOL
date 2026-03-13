@@ -104,10 +104,8 @@
     }
   },
   "QuestgiverAuras": {
-    "// ScriptId": "Aura effect broadcast to nearby players. RestrictionEffect values work as persistent looping item auras: 152=Blue, 153=Green, 154=Gold (default). Baked into the item physics description so they loop continuously.",
-    "ScriptId": 154,
-    "// ScriptIntensity": "Aura brightness/strength. 1.0 = full strength.",
-    "ScriptIntensity": 1.0,
+    "// AegisWcid": "WCID of the Aegis item equipped to quest-giver NPCs. Sanguinary Aegis options: 23356=Blue, 23357=Green, 23358=Pink, 23359=Red, 23360=White. Golden Flame: 35982.",
+    "AegisWcid": 23357
   },
   "Stackable": {
     "MaxStackSize": 100,
